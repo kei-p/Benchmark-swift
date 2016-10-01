@@ -9,6 +9,6 @@ Pod::Spec.new do |s|
   s.author       = { "kei-p" => "muddyapesjm66@gmail.com" }
   s.platform     = :ios
 
-  s.source       = { :git => "https://github.com/kei-p/Benchmark-swift.git", :branch => "master" }
+  s.source       = { :git => "https://github.com/kei-p/Benchmark-swift.git", :tag => s.version }
   s.source_files  = "Benchmark", "Benchmark/**/*.{h,m}"
 end
