@@ -1,5 +1,10 @@
 # Benchmark-swift
 
+## Installation
+```
+pod 'Benchmark', git: 'https://github.com/kei-p/Benchmark-swift.git'
+```
+
 ## Usage
 ### Case 1:
 ```
