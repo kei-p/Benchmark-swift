@@ -6,24 +6,9 @@
 
 
 import Foundation
+import Swift
 
-public class Benchmark : CustomStringConvertible{
-    struct Lap {
-        let key  : String
-        let date : NSDate
-        
-        func timeInterval(startedAt: NSDate) -> NSTimeInterval {
-            return date.timeIntervalSinceDate(startedAt)
-        }
-    }
-    
-    var laps      : [Lap] = []
-    let key : String
-    
-    init(key: String) {
-        self.key = key
-    }
-    
+public extension Benchmark {
     class func start(key: String) -> Benchmark {
         return Benchmark(key: key).start()
     }
@@ -48,6 +33,37 @@ public class Benchmark : CustomStringConvertible{
         return self
     }
     
+    var description : String {
+        let title = "Benchmark \(self.key) {\n"
+        
+        guard let startedAt = self.startedAt else {
+            return "\(title) : Invalid }"
+        }
+        let text = laps.map { (lap) -> String in
+            String(format: " %@ \t%.3f sec - %@\n", lap.key, lap.timeInterval(startedAt), lap.date)
+            }.reduce("", combine: +)
+        return "\(title)\(text)}"
+    }
+}
+
+public class Benchmark : CustomStringConvertible {
+    struct Lap {
+        let key  : String
+        let date : NSDate
+        
+        func timeInterval(startedAt: NSDate) -> NSTimeInterval {
+            return date.timeIntervalSinceDate(startedAt)
+        }
+    }
+    
+    var laps      : [Lap] = []
+    let key : String
+    
+    
+    init(key: String) {
+        self.key = key
+    }
+    
     var startedAt : NSDate? {
         let lap = laps.filter { $0.key == "start" }.first
         return lap?.date
@@ -58,17 +74,5 @@ public class Benchmark : CustomStringConvertible{
             return 0
         }
         return last.timeInterval(startedAt)
-    }
-    
-    var description : String {
-        let title = "Benchmark \(self.key) {\n"
-        
-        guard let startedAt = self.startedAt else {
-            return "\(title) : Invalid }"
-        }
-        let text = laps.map { (lap) -> String in
-            String(format: " %@ \t%.3f sec - %@\n", lap.key, lap.timeInterval(startedAt), lap.date)
-            }.reduce("", combine: +)
-        return "\(title)\(text) }"
     }
 }
