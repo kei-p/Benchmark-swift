@@ -49,6 +49,12 @@ class BenchmarkTests: XCTestCase {
         print(b)
     }
     
+    func testInvalid() {
+        let b = Benchmark("test")
+        sleep(1)
+        print(b)
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measureBlock {

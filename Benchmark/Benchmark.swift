@@ -32,16 +32,16 @@ public extension Benchmark {
     }
     
     var description : String {
-        let title = "Benchmark \(self.key) {\n"
+        let title = "Benchmark \(self.key)"
         
         guard (self.startedAt != nil) else {
-            return "\(title) : Invalid }"
+            return "\(title) : Invalid"
         }
         
         let text = laps.map { (lap) -> String in
-            lap.resultLog(self)
+            lap.resultLog(self) + "\n"
         }.reduce("", combine: +)
-        return "\(title)\(text)}"
+        return "\(title){\n\(text)}"
     }
 }
 
@@ -55,11 +55,11 @@ public class Benchmark : CustomStringConvertible {
         }
         
         func lapLog(benchmark: Benchmark) -> String {
-            return String(format: "%@.%@ \t%.3f sec - %@\n", benchmark.key, self.key, self.timeInterval(benchmark.startedAt!), self.date)
+            return String(format: "%@.%@ \t%.3f sec", benchmark.key, self.key, self.timeInterval(benchmark.startedAt!), self.date)
         }
         
         func resultLog(benchmark: Benchmark) -> String {
-            return String(format: " %@ \t%.3f sec - %@\n", self.key, self.timeInterval(benchmark.startedAt!), self.date)
+            return String(format: " %@ \t%.3f sec", self.key, self.timeInterval(benchmark.startedAt!), self.date)
         }
     }
     
