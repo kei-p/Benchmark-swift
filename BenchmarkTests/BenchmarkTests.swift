@@ -22,20 +22,20 @@ class BenchmarkTests: XCTestCase {
     }
     
     func testMeasure() {
-        let b = Benchmark.measure("test") {
+        Benchmark("test").measure {
             sleep(1)
         }
-        print(b)
     }
     
     func testLap() {
-        let b = Benchmark.start("test")
+        let b = Benchmark("test").start()
         sleep(1)
         b.lap("1")
         sleep(1)
         b.lap("2")
         sleep(1)
         b.end()
+        
         print(b)
     }
     

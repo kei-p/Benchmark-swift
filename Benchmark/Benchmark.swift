@@ -9,39 +9,38 @@ import Foundation
 import Swift
 
 public extension Benchmark {
-    class func start(key: String) -> Benchmark {
-        return Benchmark(key: key).start()
-    }
+    static var logger : (String) -> () = { (text) in print(text) }
     
-    class func measure(key: String, block: () -> ()) -> Benchmark {
-        let benchmark = Benchmark(key: key).start()
+    func measure(block: () -> ()) -> Benchmark {
+        start()
         block()
-        return benchmark.end()
+        return end()
     }
     
     func start() -> Benchmark {
-        laps.append(Lap(key: "start", date: NSDate()))
+        _lap("start")
         return self
     }
     
     func lap(lapKey: String) {
-        laps.append(Lap(key: lapKey, date: NSDate()))
+        _lap(lapKey)
     }
     
     func end() -> Benchmark {
-        laps.append(Lap(key: "end", date: NSDate()))
+        _lap("end")
         return self
     }
     
     var description : String {
         let title = "Benchmark \(self.key) {\n"
         
-        guard let startedAt = self.startedAt else {
+        guard (self.startedAt != nil) else {
             return "\(title) : Invalid }"
         }
+        
         let text = laps.map { (lap) -> String in
-            String(format: " %@ \t%.3f sec - %@\n", lap.key, lap.timeInterval(startedAt), lap.date)
-            }.reduce("", combine: +)
+            lap.resultLog(self)
+        }.reduce("", combine: +)
         return "\(title)\(text)}"
     }
 }
@@ -54,14 +53,29 @@ public class Benchmark : CustomStringConvertible {
         func timeInterval(startedAt: NSDate) -> NSTimeInterval {
             return date.timeIntervalSinceDate(startedAt)
         }
+        
+        func lapLog(benchmark: Benchmark) -> String {
+            return String(format: "%@.%@ \t%.3f sec - %@\n", benchmark.key, self.key, self.timeInterval(benchmark.startedAt!), self.date)
+        }
+        
+        func resultLog(benchmark: Benchmark) -> String {
+            return String(format: " %@ \t%.3f sec - %@\n", self.key, self.timeInterval(benchmark.startedAt!), self.date)
+        }
     }
     
-    var laps      : [Lap] = []
+    var laps : [Lap] = []
     let key : String
+    var autoLog : Bool = true
     
-    
-    init(key: String) {
+    init(_ key: String, autoLog: Bool = true) {
         self.key = key
+        self.autoLog = autoLog
+    }
+    
+    private func _lap(lapKey: String) {
+        let lap = Lap(key: lapKey, date: NSDate())
+        laps.append(lap)
+        if(self.autoLog) { Benchmark.logger(lap.lapLog(self)) }
     }
     
     var startedAt : NSDate? {
