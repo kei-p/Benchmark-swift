@@ -27,6 +27,15 @@ class BenchmarkTests: XCTestCase {
         }
     }
     
+    func testCustomizeLogger() {
+        let defaultLogger = Benchmark.logger
+        Benchmark.logger = { text in print("customize - " + text) }
+        Benchmark("test").measure { _ in
+            sleep(1)
+        }
+        Benchmark.logger = defaultLogger
+    }
+    
     func testMeasureWithLap() {
         Benchmark("test").measure { b in
             sleep(1)

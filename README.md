@@ -6,39 +6,56 @@ pod 'Benchmark', git: 'https://github.com/kei-p/Benchmark-swift.git'
 ```
 
 ## Usage
-### Case 1:
+### Closure Style
 ```
-let b = Benchmark.measure("generateImage") {
-  sleep(10)
+Benchmark("test").measure { b in
+	sleep(1)
+	b.lap("1")
+	sleep(1)
+	b.lap("2")
+	sleep(1)
 }
-print(b)
 ```
 
-
-```:output
-Benchmark generateImage {
- start 	0.000 sec - 2016-09-30 03:10:46 +0000
- end 	10.001 sec - 2016-09-30 03:10:56 +0000
- }
+#### outputlog:
+```
+test.start 	0.000 sec
+test.1 	1.000 sec
+test.2 	2.001 sec
+test.end 	3.001 sec
 ```
 
-### Case 2:
+### Instance Style
 ```
-let b = Benchmark.start("generateImage")
+let b = Benchmark("test").start()
 sleep(1)
-b.lap("step1")
+b.lap("1")
 sleep(1)
-b.lap("step2")
+b.lap("2")
 sleep(1)
 b.end()
-print(b)
 ```
 
-```:output
-Benchmark generateImage {
- start 	0.000 sec - 2016-09-30 03:10:56 +0000
- step1 	1.001 sec - 2016-09-30 03:10:57 +0000
- step2 	2.002 sec - 2016-09-30 03:10:58 +0000
- end 	3.003 sec - 2016-09-30 03:10:59 +0000
- }
+#### outputlog:
 ```
+test.start 	0.000 sec
+test.1 	1.000 sec
+test.2 	2.001 sec
+test.end 	3.001 sec
+```
+
+### Customize output stream
+```
+Benchmark.logger = { text in print("customize - " + text) }
+Benchmark("test").measure { _ in
+	sleep(1)
+}
+```
+
+#### outputlog:
+```
+customize - test.start 	0.000 sec
+customize - test.end 	1.001 sec
+```
+
+
