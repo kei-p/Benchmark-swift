@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Benchmark"
-  s.version      = "0.0.1"
+  s.version      = "0.1.0"
   s.summary      = "Simple tool for measure time used to execute"
 
   s.homepage     = "https://github.com/kei-p/Benchmark-swift"
