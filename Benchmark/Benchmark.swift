@@ -9,11 +9,11 @@ import Foundation
 import Swift
 
 public extension Benchmark {
-    static var logger : (String) -> () = { (text) in print(text) }
+    static var logger : (String) -> () = { text in print(text) }
     
-    func measure(block: () -> ()) -> Benchmark {
+    func measure(block: (Benchmark) -> ()) -> Benchmark {
         start()
-        block()
+        block(self)
         return end()
     }
     

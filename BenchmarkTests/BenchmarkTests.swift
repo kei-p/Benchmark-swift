@@ -22,7 +22,17 @@ class BenchmarkTests: XCTestCase {
     }
     
     func testMeasure() {
-        Benchmark("test").measure {
+        Benchmark("test").measure { _ in
+            sleep(1)
+        }
+    }
+    
+    func testMeasureWithLap() {
+        Benchmark("test").measure { b in
+            sleep(1)
+            b.lap("1")
+            sleep(1)
+            b.lap("2")
             sleep(1)
         }
     }
